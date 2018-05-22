@@ -1,3 +1,12 @@
+"""
+Usage:
+    exe <command>
+"""
+
+from docopt import docopt
+args = docopt(__doc__)
+
+
 import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ls.settings")
 import django
@@ -39,3 +48,20 @@ class LsCompiler(SQLCompiler):
             out_cols.append(s_sql)
 
         result.append(', '.join(out_cols))
+        import ipdb; ipdb.set_trace()
+        return result
+
+
+def a():
+    from django.db import DEFAULT_DB_ALIAS
+    from ap.models import P
+    qs = P.objects.filter(name='s')
+    co = qs.query.get_compiler(using=DEFAULT_DB_ALIAS)
+    co.__class__ = LsCompiler
+    print(co.as_sql())
+
+import co
+
+if __name__ == '__main__':
+    method = args['<command>']
+    getattr(co, method)()
